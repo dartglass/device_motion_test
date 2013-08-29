@@ -13,12 +13,13 @@ void main() {
   
   double alpha = 0.8;
   double timeConstant = 500.0;
-  double acclerationThresholdCalibration = 1.7;
+  double accelerationThresholdCalibration = 1.7;
   
-  int acclerationThresholdCount = 0;
-  int acclerationMeasuermentCount = 0;
-  int acclerationAverageTimeout = 1500; //Milliseconds
-  int acclerationAverageTimestamp = 0;
+  
+  int accelerationThresholdCount = 0;
+  int accelerationMeasuermentCount = 0;
+  int accelerationAverageTimeout = 1500; //Milliseconds
+  int accelerationAverageTimestamp = 0;
   
   //The percentage of movement obove the threshold to be count as moving;
   double percentageOfMovementThreshold = 30.0;  
@@ -53,10 +54,10 @@ void main() {
      
     double acceleration = Math.sqrt(lx*lx + ly*ly + lz*lz);
      
-    acclerationMeasuermentCount++;
+    accelerationMeasuermentCount++;
      
-    if (acceleration > acclerationThresholdCalibration) {
-      acclerationThresholdCount++;
+    if (acceleration > accelerationThresholdCalibration) {
+      accelerationThresholdCount++;
       query("#motion_acc").style.color = "#FF0000"; 
     }
     else{
@@ -66,15 +67,15 @@ void main() {
     query("#motion_x")..text   = " corrected x :"..appendText(lx.toStringAsFixed(1));
     query("#motion_y")..text   = " corrected y :"..appendText(ly.toStringAsFixed(1));
     query("#motion_z")..text   = " corrected z :"..appendText(lz.toStringAsFixed(1));
-    query("#motion_acc")..text = " acceleration:"..appendText(acceleration.toStringAsFixed(2));
+    query("#motion_acc")..text = " acceleration :"..appendText(acceleration.toStringAsFixed(2));
     
-    if ((event.timeStamp - acclerationAverageTimestamp) < acclerationAverageTimeout) return;
+    if ((event.timeStamp - accelerationAverageTimestamp) < accelerationAverageTimeout) return;
 
-    acclerationAverageTimestamp = event.timeStamp;
-    percentMovement = (acclerationThresholdCount / acclerationMeasuermentCount) * 100;
+    accelerationAverageTimestamp = event.timeStamp;
+    percentMovement = (accelerationThresholdCount / accelerationMeasuermentCount) * 100;
      
-    acclerationMeasuermentCount = 0;
-    acclerationThresholdCount = 0;
+    accelerationMeasuermentCount = 0;
+    accelerationThresholdCount = 0;
   
     if (percentMovement > percentageOfMovementThreshold) {
       movementIntervalAccumulation++;
