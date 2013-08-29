@@ -29,6 +29,8 @@ void main() {
   //The percentage of movement obove the threshold to be count as moving;
   double percentageOfMovementThreshold = 30.0;  
   
+  double avgAccelerationAccumlationThreshold = 4.1;
+  
   double percentMovement; //Percentage of time moving 
   
   int movementIntervalAccumulation = 0; 
@@ -79,8 +81,16 @@ void main() {
     if ((event.timeStamp - accelerationQuickAverageTimestamp) < accelerationQuickAverageTimeout) return;
     accelerationQuickAverageTimestamp = event.timeStamp;
     
-    avgAccelerationAccumlation = (avgAccelerationAccumlation * 0.8) + (accelerationAccumlation * 0.2); 
+    avgAccelerationAccumlation = (avgAccelerationAccumlation * 0.6) + (accelerationAccumlation * 0.4); 
     accelerationAccumlation = 0.0;
+    
+    if (avgAccelerationAccumlation > avgAccelerationAccumlationThreshold) {
+      query("#motion_c").style.color = "#00FF00"; 
+    }
+    else{
+      query("#motion_c").style.color = "#FFFFFF";
+    }
+    
     query("#motion_c")..text   = " activity level: "..appendText(avgAccelerationAccumlation.toStringAsFixed(1));
 
     
