@@ -14,12 +14,17 @@ void main() {
   double alpha = 0.8;
   double timeConstant = 500.0;
   double accelerationThresholdCalibration = 1.7;
-  
+  double accelerationAccumlation = 0.0;
+  double avgAccelerationAccumlation = 0.0;
   
   int accelerationThresholdCount = 0;
   int accelerationMeasuermentCount = 0;
+  
   int accelerationAverageTimeout = 1500; //Milliseconds
   int accelerationAverageTimestamp = 0;
+  
+  int accelerationQuickAverageTimeout = 500; //Milliseconds
+  int accelerationQuickAverageTimestamp = 0;
   
   //The percentage of movement obove the threshold to be count as moving;
   double percentageOfMovementThreshold = 30.0;  
@@ -55,6 +60,8 @@ void main() {
     double acceleration = Math.sqrt(lx*lx + ly*ly + lz*lz);
      
     accelerationMeasuermentCount++;
+    
+    accelerationAccumlation += acceleration;
      
     if (acceleration > accelerationThresholdCalibration) {
       accelerationThresholdCount++;
@@ -68,6 +75,14 @@ void main() {
     query("#motion_y")..text   = " corrected y :"..appendText(ly.toStringAsFixed(1));
     query("#motion_z")..text   = " corrected z :"..appendText(lz.toStringAsFixed(1));
     query("#motion_acc")..text = " acceleration :"..appendText(acceleration.toStringAsFixed(2));
+    
+    if ((event.timeStamp - accelerationQuickAverageTimestamp) < accelerationQuickAverageTimeout) return;
+    accelerationQuickAverageTimestamp = event.timeStamp;
+    
+    avgAccelerationAccumlation = (avgAccelerationAccumlation * 0.8) + (accelerationAccumlation * 0.2); 
+    accelerationAccumlation = 0.0;
+    query("#motion_c")..text   = " activity level: "..appendText(avgAccelerationAccumlation.toStringAsFixed(1));
+
     
     if ((event.timeStamp - accelerationAverageTimestamp) < accelerationAverageTimeout) return;
 
@@ -84,9 +99,11 @@ void main() {
     else{
       query("#motion_a").style.color = "#FFFFFF"; 
     }
-       
+
     query("#motion_a")..text   = " movement %: "..appendText(percentMovement.toStringAsFixed(0));
     query("#motion_b")..text   = " accumulation: "..appendText(movementIntervalAccumulation.toString());
+    
+    
   });
 
 
