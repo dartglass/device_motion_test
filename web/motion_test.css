@@ -1,6 +1,5 @@
-
 body {
-  background-color: #F8F8F8;
+  background-color: #000000;
   font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   font-weight: normal;
@@ -9,19 +8,15 @@ body {
 }
 
 h1, p {
-  color: #333;
+  color: #FFFFFF;
+  font-size: 45pt;
 }
 
-#sample_container_id {
+#motion_display {
   width: 100%;
-  height: 400px;
+  height: 100%;
   position: relative;
-  border: 1px solid #ccc;
-  background-color: #fff;
+  background-color: #000000;
 }
 
-#sample_text_id {
-  font-size: 24pt;
-  text-align: center;
-  margin-top: 140px;
-}
+
